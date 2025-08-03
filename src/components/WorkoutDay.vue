@@ -1,77 +1,98 @@
 <template>
   <div class="space-y-8">
     <div class="text-center mb-6">
-      <p class="text-gray-700">{{ description }}</p>
+      <p class="text-gray-700 dark:text-gray-400">{{ description }}</p>
     </div>
     <ProgressTracker :day="day" />
     <div class="grid md:grid-cols-3 gap-6">
       <div class="md:col-span-3 lg:col-span-1">
-        <div class="exercise-card p-6 h-full">
-          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Legs</h3>
+        <div
+          class="bg-white border shadow-sm rounded-xl p-6 h-full dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]"
+        >
+          <h3 class="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-white">Legs</h3>
           <ul class="space-y-3">
             <li
               v-for="(exercise, index) in store.exercises[day].legs"
               :key="index"
-              class="exercise-item flex items-center"
+              class="flex items-center"
             >
               <input
                 type="checkbox"
                 :id="`${day}-legs-${index}`"
-                class="h-5 w-5 rounded border-gray-300 text-[#a89a87] focus:ring-[#8c6f5d] mr-3"
+                class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                 :checked="exercise.completed"
                 @change="store.toggleCompletion(day, 'legs', index)"
               />
-              <label :for="`${day}-legs-${index}`" class="flex-grow">
+              <label
+                :for="`${day}-legs-${index}`"
+                class="text-sm text-gray-500 ms-3 dark:text-gray-400"
+              >
                 <span class="font-semibold">{{ exercise.name }}</span>
-                <span class="text-sm text-gray-500 block">{{ exercise.details }}</span>
+                <span class="text-sm text-gray-500 block dark:text-gray-500">{{
+                  exercise.details
+                }}</span>
               </label>
             </li>
           </ul>
         </div>
       </div>
       <div class="md:col-span-3 lg:col-span-2">
-        <div class="exercise-card p-6 h-full">
-          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Push</h3>
+        <div
+          class="bg-white border shadow-sm rounded-xl p-6 h-full dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]"
+        >
+          <h3 class="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-white">Push</h3>
           <ul class="space-y-3">
             <li
               v-for="(exercise, index) in store.exercises[day].push"
               :key="index"
-              class="exercise-item flex items-center"
+              class="flex items-center"
             >
               <input
                 type="checkbox"
                 :id="`${day}-push-${index}`"
-                class="h-5 w-5 rounded border-gray-300 text-[#a89a87] focus:ring-[#8c6f5d] mr-3"
+                class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                 :checked="exercise.completed"
                 @change="store.toggleCompletion(day, 'push', index)"
               />
-              <label :for="`${day}-push-${index}`" class="flex-grow">
+              <label
+                :for="`${day}-push-${index}`"
+                class="text-sm text-gray-500 ms-3 dark:text-gray-400"
+              >
                 <span class="font-semibold">{{ exercise.name }}</span>
-                <span class="text-sm text-gray-500 block">{{ exercise.details }}</span>
+                <span class="text-sm text-gray-500 block dark:text-gray-500">{{
+                  exercise.details
+                }}</span>
               </label>
             </li>
           </ul>
         </div>
       </div>
       <div class="md:col-span-3">
-        <div class="exercise-card p-6 h-full">
-          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Pull</h3>
+        <div
+          class="bg-white border shadow-sm rounded-xl p-6 h-full dark:bg-slate-900 dark:border-gray-700 dark:shadow-slate-700/[.7]"
+        >
+          <h3 class="text-2xl font-bold mb-4 text-center text-gray-800 dark:text-white">Pull</h3>
           <ul class="space-y-3">
             <li
               v-for="(exercise, index) in store.exercises[day].pull"
               :key="index"
-              class="exercise-item flex items-center"
+              class="flex items-center"
             >
               <input
                 type="checkbox"
                 :id="`${day}-pull-${index}`"
-                class="h-5 w-5 rounded border-gray-300 text-[#a89a87] focus:ring-[#8c6f5d] mr-3"
+                class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                 :checked="exercise.completed"
                 @change="store.toggleCompletion(day, 'pull', index)"
               />
-              <label :for="`${day}-pull-${index}`" class="flex-grow">
+              <label
+                :for="`${day}-pull-${index}`"
+                class="text-sm text-gray-500 ms-3 dark:text-gray-400"
+              >
                 <span class="font-semibold">{{ exercise.name }}</span>
-                <span class="text-sm text-gray-500 block">{{ exercise.details }}</span>
+                <span class="text-sm text-gray-500 block dark:text-gray-500">{{
+                  exercise.details
+                }}</span>
               </label>
             </li>
           </ul>
@@ -81,7 +102,7 @@
     <div class="text-center mt-8">
       <button
         @click="store.resetDay(day)"
-        class="bg-[#a89a87] hover:bg-[#8c6f5d] text-white font-bold py-2 px-6 rounded-lg transition-colors"
+        class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
       >
         Reset Day {{ day.slice(-1) }}
       </button>

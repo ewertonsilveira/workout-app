@@ -20,6 +20,8 @@ The primary goal of this project was to create a functional workout tracking app
 
 2. **Theming:** A feature was added to support both a light and a dark theme. The theme is toggled via a button and the user's preference is saved in `localStorage`.
 
+- Theme Base on: https://tailwindcss.com/docs/dark-mode
+
 3. **Styling:** The styling was initially done with Tailwind CSS. Upon request, the project was updated to support Sass (SCSS) for future styling flexibility.
 
 4. **Documentation and Delivery:**
