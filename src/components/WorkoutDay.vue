@@ -5,13 +5,13 @@
     </div>
     <ProgressTracker :day="day" />
     <div>
-      <AccordionItem title="Legs">
+      <AccordionItem title="Pull">
         <ul class="space-y-3">
-          <li v-for="(exercise, index) in store.exercises[day].legs" :key="index">
+          <li v-for="(exercise, index) in store.exercises[day].pull" :key="index">
             <ExerciseItem
               :exercise="exercise"
-              @toggle-completion="store.toggleCompletion(day, 'legs', index)"
-              @update-exercise="store.updateExercise(day, 'legs', index, $event)"
+              @toggle-completion="store.toggleCompletion(day, 'pull', index)"
+              @update-exercise="store.updateExercise(day, 'pull', index, $event)"
             />
           </li>
         </ul>
@@ -27,13 +27,13 @@
           </li>
         </ul>
       </AccordionItem>
-      <AccordionItem title="Pull">
+      <AccordionItem title="Legs">
         <ul class="space-y-3">
-          <li v-for="(exercise, index) in store.exercises[day].pull" :key="index">
+          <li v-for="(exercise, index) in store.exercises[day].legs" :key="index">
             <ExerciseItem
               :exercise="exercise"
-              @toggle-completion="store.toggleCompletion(day, 'pull', index)"
-              @update-exercise="store.updateExercise(day, 'pull', index, $event)"
+              @toggle-completion="store.toggleCompletion(day, 'legs', index)"
+              @update-exercise="store.updateExercise(day, 'legs', index, $event)"
             />
           </li>
         </ul>
