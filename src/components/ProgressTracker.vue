@@ -1,6 +1,6 @@
 <template>
   <div class="text-center mb-6">
-    <p class="text-gray-700">
+    <p class="text-gray-700 dark:text-gray-300">
       Progress: {{ completedCount }} / {{ totalCount }} exercises completed.
     </p>
   </div>

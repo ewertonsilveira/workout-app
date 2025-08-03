@@ -1,12 +1,27 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 body {
   font-family: 'Inter', sans-serif;
   background-color: #f4f1eb;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #1a1a1a;
+  color: #f4f1ed;
 }
 
 .tab-button.active {
   background-color: #a89a87;
   color: #ffffff;
   border-color: #a89a87;
+}
+
+.dark .tab-button.active {
+    background-color: #8c6f5d;
 }
 
 .tab-button {
@@ -24,6 +39,11 @@ body {
   transition: transform 0.2s;
 }
 
+.dark .exercise-card {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
 .exercise-card:hover {
   transform: translateY(-5px);
 }
@@ -31,4 +51,8 @@ body {
 .exercise-item input:checked + label {
   text-decoration: line-through;
   color: #9ca3af;
+}
+
+.dark .exercise-item input:checked + label {
+  color: #6b7280;
 }

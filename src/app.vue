@@ -1,12 +1,22 @@
 <template>
-  <div class="container mx-auto px-4 py-8 md:py-12">
+  <div class="container mx-auto px-4 py-8 md:py-12" :class="theme">
     <header class="text-center mb-10">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Ewerton's Workout Plan</h1>
-      <p class="mt-2 text-lg text-gray-600">Your interactive guide to a full-body workout.</p>
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
+        Ewerton's Workout Plan
+      </h1>
+      <p class="mt-2 text-lg text-gray-600 dark:text-gray-300">
+        Your interactive guide to a full-body workout.
+      </p>
+      <button
+        @click="toggleTheme"
+        class="absolute top-4 right-4 px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+      >
+        Toggle Theme
+      </button>
     </header>
 
     <div class="max-w-4xl mx-auto">
-      <div class="mb-8 flex justify-center border-b border-gray-300">
+      <div class="mb-8 flex justify-center border-b border-gray-300 dark:border-gray-700">
         <button
           @click="activeTab = 'day1'"
           :class="[
@@ -46,6 +56,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import WorkoutDay from './components/WorkoutDay.vue';
+import { useTheme } from './composables/useTheme';
 
 const activeTab = ref<'day1' | 'day2'>('day1');
+const { theme, toggleTheme } = useTheme();
 </script>

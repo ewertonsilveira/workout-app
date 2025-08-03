@@ -1,13 +1,15 @@
 <template>
   <div class="space-y-8">
     <div class="text-center mb-6">
-      <p class="text-gray-700">{{ description }}</p>
+      <p class="text-gray-700 dark:text-gray-300">{{ description }}</p>
     </div>
     <ProgressTracker :day="day" />
     <div class="grid md:grid-cols-3 gap-6">
       <div class="md:col-span-3 lg:col-span-1">
         <div class="exercise-card p-6 h-full">
-          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Legs</h3>
+          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d] dark:text-[#a89a87]">
+            Legs
+          </h3>
           <ul class="space-y-3">
             <li
               v-for="(exercise, index) in store.exercises[day].legs"
@@ -23,7 +25,9 @@
               />
               <label :for="`${day}-legs-${index}`" class="flex-grow">
                 <span class="font-semibold">{{ exercise.name }}</span>
-                <span class="text-sm text-gray-500 block">{{ exercise.details }}</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 block">{{
+                  exercise.details
+                }}</span>
               </label>
             </li>
           </ul>
@@ -31,7 +35,9 @@
       </div>
       <div class="md:col-span-3 lg:col-span-2">
         <div class="exercise-card p-6 h-full">
-          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Push</h3>
+          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d] dark:text-[#a89a87]">
+            Push
+          </h3>
           <ul class="space-y-3">
             <li
               v-for="(exercise, index) in store.exercises[day].push"
@@ -47,7 +53,9 @@
               />
               <label :for="`${day}-push-${index}`" class="flex-grow">
                 <span class="font-semibold">{{ exercise.name }}</span>
-                <span class="text-sm text-gray-500 block">{{ exercise.details }}</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 block">{{
+                  exercise.details
+                }}</span>
               </label>
             </li>
           </ul>
@@ -55,7 +63,9 @@
       </div>
       <div class="md:col-span-3">
         <div class="exercise-card p-6 h-full">
-          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Pull</h3>
+          <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d] dark:text-[#a89a87]">
+            Pull
+          </h3>
           <ul class="space-y-3">
             <li
               v-for="(exercise, index) in store.exercises[day].pull"
@@ -71,7 +81,9 @@
               />
               <label :for="`${day}-pull-${index}`" class="flex-grow">
                 <span class="font-semibold">{{ exercise.name }}</span>
-                <span class="text-sm text-gray-500 block">{{ exercise.details }}</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 block">{{
+                  exercise.details
+                }}</span>
               </label>
             </li>
           </ul>
