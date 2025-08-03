@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ewerton's Interactive Workout Plan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A tab-based, single-page application is used to separate the two workout days, preventing a long, unmanageable scroll. This design allows the user to focus on one workout at a time. Within each day, exercises are grouped into Push, Pull, and Legs categories using a card-based layout. This visual separation makes the plan easy to scan and understand. Interactive checkboxes are included for each exercise to allow real-time progress tracking, and a reset button provides a simple way to start fresh for the next session. This structure was chosen for its clarity, interactivity, and focus on the user's primary task: completing a specific day's workout. -->
+    <!-- Visualization & Content Choices: The source report is a workout schedule. Goal: Provide a clear, interactive, and trackable workout plan. Presentation Method: A tabbed interface (HTML/JS) to switch between Workout Day 1 and 2. Each exercise is an item in a list within a styled card (HTML/Tailwind CSS) for its respective category (Push, Pull, Legs). Interaction: Users can click a checkbox next to each exercise to mark it as complete. A "Reset" button for each day clears all checkboxes. Justification: This approach turns a static list into an engaging tool. Checkboxes provide a sense of accomplishment and tracking, which is highly motivating. The tabbed layout simplifies navigation and focuses the user's attention. Library/Method: Vanilla JavaScript for tab switching and checkbox/reset logic. No charts are needed as the content is procedural, not statistical. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f4f1eb;
+      }
+
+      .tab-button.active {
+        background-color: #a89a87;
+        color: #ffffff;
+        border-color: #a89a87;
+      }
+
+      .tab-button {
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+      }
+
+      .exercise-card {
+        background-color: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow:
+          0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+        transition: transform 0.2s;
+      }
+
+      .exercise-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .exercise-item input:checked + label {
+        text-decoration: line-through;
+        color: #9ca3af;
+      }
+    </style>
+  </head>
+
+  <body class="antialiased text-gray-800">
+    <div class="container mx-auto px-4 py-8 md:py-12">
+      <header class="text-center mb-10">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Ewerton's Workout Plan</h1>
+        <p class="mt-2 text-lg text-gray-600">Your interactive guide to a full-body workout.</p>
+      </header>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-8 flex justify-center border-b border-gray-300">
+          <button
+            id="tab1-btn"
+            class="tab-button text-lg font-semibold py-3 px-6 border-b-2 border-transparent focus:outline-none active"
+          >
+            Workout Day 1
+          </button>
+          <button
+            id="tab2-btn"
+            class="tab-button text-lg font-semibold py-3 px-6 border-b-2 border-transparent focus:outline-none"
+          >
+            Workout Day 2
+          </button>
+        </div>
+
+        <main>
+          <div id="tab1-content" class="tab-content space-y-8">
+            <div class="text-center mb-6">
+              <p class="text-gray-700">
+                This is your first full-body session of the week. Focus on controlled movements and
+                proper form to maximize muscle engagement across all groups.
+              </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="md:col-span-3 lg:col-span-1">
+                <div class="exercise-card p-6 h-full">
+                  <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Legs</h3>
+                  <ul id="day1-legs" class="space-y-3"></ul>
+                </div>
+              </div>
+              <div class="md:col-span-3 lg:col-span-2">
+                <div class="exercise-card p-6 h-full">
+                  <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Push</h3>
+                  <ul id="day1-push" class="space-y-3"></ul>
+                </div>
+              </div>
+              <div class="md:col-span-3">
+                <div class="exercise-card p-6 h-full">
+                  <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Pull</h3>
+                  <ul id="day1-pull" class="space-y-3"></ul>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-8">
+              <button
+                onclick="resetCheckboxes('day1')"
+                class="bg-[#a89a87] hover:bg-[#8c6f5d] text-white font-bold py-2 px-6 rounded-lg transition-colors"
+              >
+                Reset Day 1
+              </button>
+            </div>
+          </div>
+
+          <div id="tab2-content" class="tab-content hidden space-y-8">
+            <div class="text-center mb-6">
+              <p class="text-gray-700">
+                Your second session builds on the first. You'll find slight variations in exercises
+                to challenge your muscles in new ways, ensuring balanced development.
+              </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+              <div class="md:col-span-3 lg:col-span-1">
+                <div class="exercise-card p-6 h-full">
+                  <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Legs</h3>
+                  <ul id="day2-legs" class="space-y-3"></ul>
+                </div>
+              </div>
+              <div class="md:col-span-3 lg:col-span-2">
+                <div class="exercise-card p-6 h-full">
+                  <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Push</h3>
+                  <ul id="day2-push" class="space-y-3"></ul>
+                </div>
+              </div>
+              <div class="md:col-span-3">
+                <div class="exercise-card p-6 h-full">
+                  <h3 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d]">Pull</h3>
+                  <ul id="day2-pull" class="space-y-3"></ul>
+                </div>
+              </div>
+            </div>
+            <div class="text-center mt-8">
+              <button
+                onclick="resetCheckboxes('day2')"
+                class="bg-[#a89a87] hover:bg-[#8c6f5d] text-white font-bold py-2 px-6 rounded-lg transition-colors"
+              >
+                Reset Day 2
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const exercises = {
+        day1: {
+          push: [
+            { name: 'Bench Press (15kg)', details: '3 sets of 8-12 reps' },
+            { name: 'Shoulder Press', details: '3 sets of 8-12 reps' },
+            { name: 'Lateral Raise (5kg)', details: '3 sets of 12-15 reps' },
+            { name: 'Dumbbell Lateral Raise', details: '3 sets of 12-15 reps' },
+            { name: 'Push-ups', details: '3 sets to failure' },
+            { name: 'Russian Push-ups', details: '3 sets to failure' },
+            { name: 'Pike Push-ups', details: '3 sets of 5 reps' },
+            { name: 'Hand Stand', details: '3 sets of 30-second holds' },
+            { name: 'Egyptian Raise', details: '3 sets of 10-15 reps' },
+            { name: 'Low Bar Transitions', details: '3 sets to failure' },
+            { name: 'Straight Bar Dips', details: '3 sets to failure' },
+            { name: 'Dips', details: '3 sets to failure' },
+          ],
+          pull: [
+            { name: 'Pull-ups (15kg)', details: '3 sets of 8-12 reps' },
+            { name: 'Bent-over Barbell Row', details: '3 sets of 8-12 reps' },
+            { name: 'Seated Cable Row', details: '3 sets of 10-15 reps' },
+            { name: 'Pelican Curl (rings)', details: '3 sets of 10-15 reps' },
+            { name: 'Low Bar Negative Muscle Ups', details: '3 sets to failure' },
+          ],
+          legs: [
+            { name: 'Barbell Back Squat', details: '3 sets of 8-12 reps' },
+            { name: 'Romanian Deadlifts', details: '3 sets of 8-12 reps' },
+          ],
+        },
+        day2: {
+          push: [
+            { name: 'Incline Bench Press', details: '3 sets of 8-12 reps' },
+            { name: 'Overhead Press (barbell)', details: '3 sets of 8-12 reps' },
+            { name: 'Dips', details: '3 sets to failure' },
+            { name: 'Decline Push-ups with rings', details: '3 sets to failure' },
+            { name: 'Push-ups', details: '3 sets to failure' },
+            { name: 'Russian Push-ups', details: '3 sets to failure' },
+            { name: 'Pike Push-ups', details: '3 sets of 5 reps' },
+            { name: 'Lateral Raise (5kg)', details: '3 sets of 12-15 reps' },
+            { name: 'Dumbbell Lateral Raise', details: '3 sets of 12-15 reps' },
+            { name: 'Hand Stand', details: '3 sets of 30-second holds' },
+            { name: 'Egyptian Raise', details: '3 sets of 10-15 reps' },
+            { name: 'Low Bar Transitions', details: '3 sets to failure' },
+            { name: 'Straight Bar Dips', details: '3 sets to failure' },
+            { name: 'Low Bar Negative Muscle Ups', details: '3 sets to failure' },
+          ],
+          pull: [
+            { name: 'Chin-ups (15kg)', details: '3 sets of 8-12 reps' },
+            { name: 'Pull-ups (15kg)', details: '3 sets of 8-12 reps' },
+            { name: 'Lat Pull Down', details: '3 sets of 10-15 reps' },
+            { name: 'Single-arm Lat Pull Down', details: '3 sets of 10-15 reps per side' },
+            { name: 'Ring Curl', details: '3 sets of 10-15 reps' },
+          ],
+          legs: [{ name: 'Barbell Back Squat', details: '3 sets of 8-12 reps' }],
+        },
+      };
+
+      function populateExercises() {
+        for (const day in exercises) {
+          for (const category in exercises[day]) {
+            const container = document.getElementById(`${day}-${category}`);
+            if (container) {
+              exercises[day][category].forEach((exercise, index) => {
+                const li = document.createElement('li');
+                li.className = 'exercise-item flex items-center';
+                const checkboxId = `${day}-${category}-${index}`;
+                li.innerHTML = `
+                                <input type="checkbox" id="${checkboxId}" class="h-5 w-5 rounded border-gray-300 text-[#a89a87] focus:ring-[#8c6f5d] mr-3">
+                                <label for="${checkboxId}" class="flex-grow">
+                                    <span class="font-semibold">${exercise.name}</span>
+                                    <span class="text-sm text-gray-500 block">${exercise.details}</span>
+                                </label>
+                            `;
+                container.appendChild(li);
+              });
+            }
+          }
+        }
+      }
+
+      function setupTabs() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            tabButtons.forEach((btn) => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const targetContentId = button.id.replace('-btn', '-content');
+            tabContents.forEach((content) => {
+              if (content.id === targetContentId) {
+                content.classList.remove('hidden');
+              } else {
+                content.classList.add('hidden');
+              }
+            });
+          });
+        });
+      }
+
+      function resetCheckboxes(day) {
+        const checkboxes = document.querySelectorAll(`#${day}-content input[type="checkbox"]`);
+        checkboxes.forEach((checkbox) => {
+          checkbox.checked = false;
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        populateExercises();
+        setupTabs();
+      });
+    </script>
+  </body>
+</html>
