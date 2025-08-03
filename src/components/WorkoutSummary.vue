@@ -24,13 +24,17 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useWorkoutStore } from '../composables/useWorkoutStore';
+import {
+  useWorkoutStore,
+  type Exercise,
+  type ExerciseCategory,
+} from '../composables/useWorkoutStore';
 
 const store = useWorkoutStore();
-const categories = ['push', 'pull', 'legs'];
+const categories: ExerciseCategory[] = ['push', 'pull', 'legs'];
 
-const completedExercises = computed(() => {
-  const allExercises = [];
+const completedExercises = computed<Exercise[]>(() => {
+  const allExercises: Exercise[] = [];
   for (const day of Object.values(store.exercises)) {
     for (const category of Object.values(day)) {
       allExercises.push(...category.filter((ex) => ex.completed));
@@ -39,7 +43,7 @@ const completedExercises = computed(() => {
   return allExercises;
 });
 
-const getCompletedExercises = (category: string) => {
+const getCompletedExercises = (category: ExerciseCategory) => {
   return completedExercises.value.filter((exercise) => {
     for (const day of Object.values(store.exercises)) {
       if (day[category]?.some((ex) => ex.name === exercise.name && ex.completed)) {
