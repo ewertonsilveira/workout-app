@@ -1,6 +1,23 @@
 import { reactive, watch } from 'vue';
 
-const defaultExercises = {
+interface Exercise {
+  name: string;
+  sets: number;
+  reps: number;
+  weight: number;
+  completed: boolean;
+}
+
+type ExerciseCategory = 'push' | 'pull' | 'legs';
+type WorkoutDay = 'day1' | 'day2';
+
+type WorkoutData = {
+  [key in WorkoutDay]: {
+    [key in ExerciseCategory]: Exercise[];
+  };
+};
+
+const defaultExercises: WorkoutData = {
   day1: {
     push: [
       { name: 'Bench Press', sets: 3, reps: 10, weight: 15, completed: false },
@@ -57,18 +74,28 @@ const defaultExercises = {
 };
 
 const savedExercises = localStorage.getItem('workout-data');
-const exercisesData = savedExercises ? JSON.parse(savedExercises) : defaultExercises;
+const exercisesData: WorkoutData = savedExercises ? JSON.parse(savedExercises) : defaultExercises;
 
 const store = reactive({
   exercises: exercisesData,
-  toggleCompletion(day: 'day1' | 'day2', category: string, exerciseIndex: number) {
+  toggleCompletion(day: WorkoutDay, category: ExerciseCategory, exerciseIndex: number) {
     const exercise = store.exercises[day][category][exerciseIndex];
     exercise.completed = !exercise.completed;
   },
-  resetDay(day: 'day1' | 'day2') {
+  updateExercise(
+    day: WorkoutDay,
+    category: ExerciseCategory,
+    exerciseIndex: number,
+    payload: { field: 'sets' | 'reps' | 'weight'; value: number }
+  ) {
+    const exercise = store.exercises[day][category][exerciseIndex];
+    exercise[payload.field] = payload.value;
+  },
+  resetDay(day: WorkoutDay) {
     for (const category in store.exercises[day]) {
-      store.exercises[day][category].forEach((exercise, index) => {
-        const defaultExercise = defaultExercises[day][category][index];
+      const cat = category as ExerciseCategory;
+      store.exercises[day][cat].forEach((exercise: Exercise, index: number) => {
+        const defaultExercise = defaultExercises[day][cat][index];
         exercise.completed = false;
         exercise.sets = defaultExercise.sets;
         exercise.reps = defaultExercise.reps;
