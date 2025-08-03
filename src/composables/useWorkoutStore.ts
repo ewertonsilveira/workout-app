@@ -1,6 +1,6 @@
 import { reactive, watch } from 'vue';
 
-interface Exercise {
+export interface Exercise {
   name: string;
   sets: number;
   reps: number;
@@ -8,8 +8,8 @@ interface Exercise {
   completed: boolean;
 }
 
-type ExerciseCategory = 'push' | 'pull' | 'legs';
-type WorkoutDay = 'day1' | 'day2';
+export type ExerciseCategory = 'push' | 'pull' | 'legs';
+export type WorkoutDay = 'day1' | 'day2';
 
 type WorkoutData = {
   [key in WorkoutDay]: {

@@ -8,10 +8,15 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useWorkoutStore } from '../composables/useWorkoutStore';
+import {
+  useWorkoutStore,
+  Exercise,
+  ExerciseCategory,
+  WorkoutDay,
+} from '../composables/useWorkoutStore';
 
 const props = defineProps<{
-  day: 'day1' | 'day2';
+  day: WorkoutDay;
 }>();
 
 const store = useWorkoutStore();
@@ -19,7 +24,8 @@ const store = useWorkoutStore();
 const completedCount = computed(() => {
   let count = 0;
   for (const category in store.exercises[props.day]) {
-    count += store.exercises[props.day][category].filter((ex) => ex.completed).length;
+    const cat = category as ExerciseCategory;
+    count += store.exercises[props.day][cat].filter((ex: Exercise) => ex.completed).length;
   }
   return count;
 });
@@ -27,7 +33,8 @@ const completedCount = computed(() => {
 const totalCount = computed(() => {
   let count = 0;
   for (const category in store.exercises[props.day]) {
-    count += store.exercises[props.day][category].length;
+    const cat = category as ExerciseCategory;
+    count += store.exercises[props.day][cat].length;
   }
   return count;
 });
