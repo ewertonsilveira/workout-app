@@ -15,7 +15,7 @@
       </button>
     </header>
 
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-6xl mx-auto">
       <div class="mb-8 flex justify-center border-b border-gray-300 dark:border-gray-700">
         <button
           @click="activeTab = 'day1'"
