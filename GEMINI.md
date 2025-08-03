@@ -27,7 +27,7 @@ The primary goal of this project was to create a functional workout tracking app
 
    - A `FEATURES.md` file was created and later updated to serve as a comprehensive summary of the project's features and development history.
 
-   - Extra requirement and features will be saved on folder `Features`. And each Feature file will have it's feature name and a version/tracking number.
+   - Extra requirement and features will be saved on folder `Features`. And each Feature file will have it's version/tracking number that increases on earch feature/requirement we add and feature/requirement name.
 
 ### Project File Structure
 

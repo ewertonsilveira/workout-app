@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import App from './app.vue';
 import './assets/styles/main.scss';
+import App from './app.vue';
 
 createApp(App).mount('#app');
