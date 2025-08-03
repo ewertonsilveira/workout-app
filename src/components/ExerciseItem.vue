@@ -1,43 +1,67 @@
 <template>
   <div
-    class="exercise-item flex items-center justify-between p-2 bg-gray-100 dark:bg-gray-700 rounded-lg mb-2"
+    class="p-4 rounded-2xl mb-4"
+    :class="{
+      'bg-card-light dark:bg-card-dark shadow-md': !exercise.completed,
+      'bg-gray-200 dark:bg-gray-700': exercise.completed,
+    }"
   >
-    <span
-      :class="{ 'line-through': exercise.completed }"
-      class="text-gray-800 dark:text-gray-200"
-      >{{ exercise.name }}</span
-    >
-    <div class="flex items-center">
-      <input
-        type="number"
-        :value="exercise.sets"
-        @input="update('sets', $event)"
-        class="w-16 text-center mx-1 bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-500 rounded"
-      />
-      <input
-        type="number"
-        :value="exercise.reps"
-        @input="update('reps', $event)"
-        class="w-16 text-center mx-1 bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-500 rounded"
-      />
-      <input
-        type="number"
-        :value="exercise.weight"
-        @input="update('weight', $event)"
-        class="w-16 text-center mx-1 bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-500 rounded"
-      />
-      <input
-        type="checkbox"
-        :checked="exercise.completed"
-        @change="toggleCompletion"
-        class="ml-4 h-5 w-5 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-      />
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <input
+          type="checkbox"
+          :checked="exercise.completed"
+          @change="toggleCompletion"
+          class="h-7 w-7 rounded-full text-primary-dark bg-gray-300 border-gray-400 focus:ring-primary-dark dark:focus:ring-offset-background-dark"
+        />
+        <span
+          class="ml-4 text-xl font-semibold"
+          :class="{
+            'line-through text-gray-500 dark:text-gray-400': exercise.completed,
+            'text-text-light dark:text-text-dark': !exercise.completed,
+          }"
+          >{{ exercise.name }}</span
+        >
+      </div>
+    </div>
+
+    <div v-if="!exercise.completed" class="mt-4 grid grid-cols-3 gap-x-2 text-center">
+      <div>
+        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400">Sets</label>
+        <NumberStepper
+          :model-value="exercise.sets"
+          @update:model-value="update('sets', $event)"
+          :step="1"
+          :min="0"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400">Reps</label>
+        <NumberStepper
+          :model-value="exercise.reps"
+          @update:model-value="update('reps', $event)"
+          :step="1"
+          :min="0"
+        />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-500 dark:text-gray-400"
+          >Weight (kg)</label
+        >
+        <NumberStepper
+          :model-value="exercise.weight"
+          @update:model-value="update('weight', $event)"
+          :step="2.5"
+          :min="0"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
+import NumberStepper from './NumberStepper.vue';
 
 defineProps({
   exercise: {
@@ -52,8 +76,7 @@ const toggleCompletion = () => {
   emit('toggle-completion');
 };
 
-const update = (field: 'sets' | 'reps' | 'weight', event: Event) => {
-  const target = event.target as HTMLInputElement;
-  emit('update-exercise', { field, value: Number(target.value) });
+const update = (field: 'sets' | 'reps' | 'weight', value: number) => {
+  emit('update-exercise', { field, value });
 };
 </script>

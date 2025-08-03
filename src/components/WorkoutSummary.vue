@@ -1,19 +1,30 @@
 <template>
-  <div class="workout-summary p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800">
-    <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Workout Summary</h2>
-    <div v-if="completedExercises.length === 0" class="text-gray-600 dark:text-gray-400">
-      No exercises completed yet.
+  <div class="workout-summary p-5 rounded-2xl bg-card-light dark:bg-card-dark shadow-md">
+    <h2 class="text-2xl font-bold mb-4 text-center text-text-light dark:text-text-dark">
+      Session Summary
+    </h2>
+    <div
+      v-if="completedExercises.length === 0"
+      class="text-center text-gray-500 dark:text-gray-400 py-4"
+    >
+      <p>Complete an exercise to see your summary here!</p>
     </div>
-    <div v-else>
+    <div v-else class="space-y-4">
       <div v-for="category in categories" :key="category">
         <div v-if="getCompletedExercises(category).length > 0">
-          <h3 class="text-xl font-semibold mt-4 capitalize text-gray-800 dark:text-gray-200">
+          <h3
+            class="text-lg font-semibold capitalize text-primary-dark dark:text-primary-light border-b-2 border-border-light dark:border-border-dark pb-1 mb-2"
+          >
             {{ category }}
           </h3>
-          <ul class="list-disc list-inside mt-2 space-y-1 text-gray-700 dark:text-gray-300">
-            <li v-for="exercise in getCompletedExercises(category)" :key="exercise.name">
-              {{ exercise.name }} - {{ exercise.sets }} sets, {{ exercise.reps }} reps @
-              {{ exercise.weight }}kg
+          <ul class="space-y-2 text-text-light dark:text-text-dark">
+            <li
+              v-for="exercise in getCompletedExercises(category)"
+              :key="exercise.name"
+              class="text-sm"
+            >
+              <span class="font-medium">{{ exercise.name }}:</span>
+              {{ exercise.sets }} sets x {{ exercise.reps }} reps @ {{ exercise.weight }}kg
             </li>
           </ul>
         </div>
@@ -31,7 +42,7 @@ import {
 } from '../composables/useWorkoutStore';
 
 const store = useWorkoutStore();
-const categories: ExerciseCategory[] = ['push', 'pull', 'legs'];
+const categories: ExerciseCategory[] = ['pull', 'push', 'legs'];
 
 const completedExercises = computed<Exercise[]>(() => {
   const allExercises: Exercise[] = [];
@@ -44,13 +55,14 @@ const completedExercises = computed<Exercise[]>(() => {
 });
 
 const getCompletedExercises = (category: ExerciseCategory) => {
-  return completedExercises.value.filter((exercise) => {
-    for (const day of Object.values(store.exercises)) {
-      if (day[category]?.some((ex) => ex.name === exercise.name && ex.completed)) {
-        return true;
+  const categoryExercises = new Map<string, Exercise>();
+  for (const day of Object.values(store.exercises)) {
+    day[category]?.forEach((ex) => {
+      if (ex.completed) {
+        categoryExercises.set(ex.name, ex);
       }
-    }
-    return false;
-  });
+    });
+  }
+  return Array.from(categoryExercises.values());
 };
 </script>

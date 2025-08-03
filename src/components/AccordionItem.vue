@@ -1,13 +1,15 @@
 <template>
-  <div class="accordion-item border border-gray-200 dark:border-gray-700 rounded-lg mb-4">
+  <div class="bg-card-light dark:bg-card-dark rounded-2xl shadow-md overflow-hidden">
     <button
       @click="toggle"
-      class="w-full flex justify-between items-center p-4 text-left text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none"
+      class="w-full flex justify-between items-center p-5 text-left focus:outline-none"
     >
-      <h3 class="text-xl font-semibold">{{ title }}</h3>
+      <h3 class="text-xl font-bold text-text-light dark:text-text-dark">
+        {{ title }}
+      </h3>
       <svg
         :class="{ 'transform rotate-180': isOpen }"
-        class="w-6 h-6 transition-transform duration-300"
+        class="w-8 h-8 transition-transform duration-300 text-primary-dark dark:text-primary-light"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -28,7 +30,7 @@
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div v-if="isOpen" class="p-4 bg-white dark:bg-gray-900">
+      <div v-if="isOpen" class="px-5 pb-5">
         <slot></slot>
       </div>
     </transition>
@@ -42,7 +44,7 @@ defineProps<{
   title: string;
 }>();
 
-const isOpen = ref(false);
+const isOpen = ref(true); // Default to open
 
 const toggle = () => {
   isOpen.value = !isOpen.value;
@@ -50,22 +52,28 @@ const toggle = () => {
 
 const beforeEnter = (el: Element) => {
   (el as HTMLElement).style.height = '0';
+  (el as HTMLElement).style.opacity = '0';
 };
 const enter = (el: Element) => {
   (el as HTMLElement).style.height = el.scrollHeight + 'px';
+  (el as HTMLElement).style.opacity = '1';
 };
 const beforeLeave = (el: Element) => {
   (el as HTMLElement).style.height = el.scrollHeight + 'px';
+  (el as HTMLElement).style.opacity = '1';
 };
 const leave = (el: Element) => {
   (el as HTMLElement).style.height = '0';
+  (el as HTMLElement).style.opacity = '0';
 };
 </script>
 
 <style scoped>
 .accordion-enter-active,
 .accordion-leave-active {
-  transition: height 0.3s ease-in-out;
+  transition:
+    height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   overflow: hidden;
 }
 </style>
