@@ -53,7 +53,6 @@
           Sign up
         </button>
         <p v-if="errorMessage" class="text-sm text-center text-red-500">{{ errorMessage }}</p>
-        <p v-if="successMessage" class="text-sm text-center text-green-500">{{ successMessage }}</p>
       </form>
       <p class="text-sm text-center text-gray-600 dark:text-gray-400">
         Already have an account?
@@ -74,12 +73,11 @@ const displayName = ref('');
 const email = ref('');
 const password = ref('');
 const errorMessage = ref('');
-const successMessage = ref('');
 const router = useRouter();
 
 const handleSignup = async () => {
   try {
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: email.value,
       password: password.value,
       options: {
@@ -89,16 +87,9 @@ const handleSignup = async () => {
       },
     });
     if (error) throw error;
-
-    if (data.session) {
-      router.push('/');
-    } else {
-      successMessage.value = 'Success! Please check your email to verify your account.';
-      errorMessage.value = '';
-    }
+    router.push('/');
   } catch (error) {
     errorMessage.value = error.message;
-    successMessage.value = '';
   }
 };
 </script>
