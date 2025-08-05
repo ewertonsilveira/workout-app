@@ -68,7 +68,7 @@
       <!-- Overlay -->
       <div v-if="menuOpen" @click="menuOpen = false" class="fixed inset-0 bg-black/30 z-40"></div>
 
-      <SideMenu :is-open="menuOpen" @close="menuOpen = false" @logout="handleLogout" />
+      <SideMenu :is-open="menuOpen" @close="menuOpen = false" />
 
       <main class="pt-20">
         <div class="p-4 sm:p-6">
@@ -81,20 +81,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { useTheme } from './composables/useTheme';
 import SideMenu from './components/SideMenu.vue';
 import ProfileDropdown from './components/ProfileDropdown.vue';
 
 const { theme, toggleTheme } = useTheme();
 const menuOpen = ref(false);
-const router = useRouter();
-
-const handleLogout = () => {
-  console.log('Logout action triggered');
-  // Here you would typically clear any user session/token.
-  // For now, we'll just navigate to the login page.
-  menuOpen.value = false;
-  router.push('/login');
-};
 </script>
