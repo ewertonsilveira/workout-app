@@ -19,23 +19,41 @@
     </nav>
     <div class="p-4">
       <button
+        v-if="user"
         class="w-full text-center py-3 text-lg bg-primary-dark text-white rounded-lg hover:bg-opacity-90"
         @click="logout"
       >
         Logout
+      </button>
+      <button
+        v-else
+        class="w-full text-center py-3 text-lg bg-primary-dark text-white rounded-lg hover:bg-opacity-90"
+        @click="login"
+      >
+        Log In
       </button>
     </div>
   </aside>
 </template>
 
 <script setup lang="ts">
+import { useAuth } from '@/composables/useAuth';
+import { useRouter } from 'vue-router';
+
 defineProps<{
   isOpen: boolean;
 }>();
-const emit = defineEmits(['close', 'logout']);
+const emit = defineEmits(['close']);
+const { user, signOut } = useAuth();
+const router = useRouter();
 
 const logout = () => {
-  emit('logout');
+  signOut();
+  emit('close');
+};
+
+const login = () => {
+  router.push('/login');
   emit('close');
 };
 </script>
