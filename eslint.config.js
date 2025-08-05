@@ -6,6 +6,9 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 
 export default [
   {
+    ignores: ['dist/**', 'node_modules/**', '.husky/**'],
+  },
+  {
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -23,6 +26,21 @@ export default [
       parserOptions: {
         parser: tseslint.parser,
       },
+    },
+  },
+  {
+    files: ['server/**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+      parserOptions: {
+        sourceType: 'commonjs',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
     },
   },
 ];

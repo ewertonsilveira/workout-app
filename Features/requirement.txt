@@ -1,8 +1,20 @@
 # New Requirement as Feature: 
-- Add a menu hamburgher to left side. 
+- Integration with Third party identity.  Implement Email, Google, and GitHub Authentication. 
+-- Email & Password (local strategy)
+-- Google OAuth and GitHub OAuth
+-- Add login and signup
 
-## UI Design example
+## UI Design example:
 - @photo/image.png
 
 ## Structure
+
+/passport-auth-app
+├── config/
+│ ├── passport
+├── models/
+│ └── User
+├── routes/
+│ └── auth
+├── .env
 
