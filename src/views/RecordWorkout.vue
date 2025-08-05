@@ -9,9 +9,9 @@
       </p>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="md:col-span-2">
-        <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <div class="lg:w-2/3">
           <div class="mb-8 flex justify-center">
             <div class="flex w-full max-w-md p-1 bg-gray-200 dark:bg-gray-700 rounded-full">
               <button
@@ -52,10 +52,10 @@
             />
           </main>
         </div>
-      </div>
-      <div class="md:col-span-1">
-        <div class="sticky top-24">
-          <WorkoutSummary />
+        <div class="lg:w-1/3">
+          <div class="sticky top-24">
+            <WorkoutSummary />
+          </div>
         </div>
       </div>
     </div>

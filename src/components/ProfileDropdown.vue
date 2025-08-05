@@ -21,10 +21,10 @@
       class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50"
     >
       <div v-if="user" class="px-4 py-2">
-        <p class="text-sm font-semibold text-gray-900 dark:text-white">
+        <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">
           {{ user.user_metadata.display_name || user.email }}
         </p>
-        <p class="text-xs text-gray-600 dark:text-gray-400">{{ user.email }}</p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ user.email }}</p>
       </div>
       <div class="border-t border-gray-200 dark:border-gray-700"></div>
       <button
