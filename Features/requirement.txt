@@ -1,20 +1,10 @@
 # New Requirement as Feature: 
-- Integration with Third party identity.  Implement Email, Google, and GitHub Authentication. 
--- Email & Password (local strategy)
--- Google OAuth and GitHub OAuth
--- Add login and signup
+- Create a user Icon on top right corner (right to theme change button)
+- Add a dropdown section containing user information and logout button
+- Add css styles that matches the application
+
+# Code example:
 
 ## UI Design example:
-- @photo/image.png
 
 ## Structure
-
-/passport-auth-app
-├── config/
-│ ├── passport
-├── models/
-│ └── User
-├── routes/
-│ └── auth
-├── .env
-

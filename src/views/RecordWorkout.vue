@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ProfileView />
     <header class="text-center mb-10">
       <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
         Home Workout Plan
@@ -66,6 +67,7 @@
 import { ref } from 'vue';
 import WorkoutDay from '../components/WorkoutDay.vue';
 import WorkoutSummary from '../components/WorkoutSummary.vue';
+import ProfileView from '../components/ProfileView.vue';
 
 const activeTab = ref<'day1' | 'day2'>('day1');
 </script>

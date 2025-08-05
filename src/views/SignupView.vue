@@ -4,7 +4,7 @@
       <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white">
         Create an account
       </h1>
-      <form class="space-y-6">
+      <form @submit.prevent="handleSignup" class="space-y-6">
         <div>
           <label
             for="displayName"
@@ -12,10 +12,12 @@
             >Display Name</label
           >
           <input
+            v-model="displayName"
             type="text"
             name="displayName"
             id="displayName"
             class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            required
           />
         </div>
         <div>
@@ -23,10 +25,12 @@
             >Email</label
           >
           <input
+            v-model="email"
             type="email"
             name="email"
             id="email"
             class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            required
           />
         </div>
         <div>
@@ -34,10 +38,12 @@
             >Password</label
           >
           <input
+            v-model="password"
             type="password"
             name="password"
             id="password"
             class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-200 dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            required
           />
         </div>
         <button
@@ -46,6 +52,8 @@
         >
           Sign up
         </button>
+        <p v-if="errorMessage" class="text-sm text-center text-red-500">{{ errorMessage }}</p>
+        <p v-if="successMessage" class="text-sm text-center text-green-500">{{ successMessage }}</p>
       </form>
       <p class="text-sm text-center text-gray-600 dark:text-gray-400">
         Already have an account?
@@ -57,4 +65,40 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { supabase } from '../supabase';
+
+const displayName = ref('');
+const email = ref('');
+const password = ref('');
+const errorMessage = ref('');
+const successMessage = ref('');
+const router = useRouter();
+
+const handleSignup = async () => {
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email.value,
+      password: password.value,
+      options: {
+        data: {
+          display_name: displayName.value,
+        },
+      },
+    });
+    if (error) throw error;
+
+    if (data.session) {
+      router.push('/');
+    } else {
+      successMessage.value = 'Success! Please check your email to verify your account.';
+      errorMessage.value = '';
+    }
+  } catch (error) {
+    errorMessage.value = error.message;
+    successMessage.value = '';
+  }
+};
+</script>
