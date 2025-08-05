@@ -1,8 +1,29 @@
 <template>
-  <div :class="theme" class="min-h-screen">
-    <div class="main-container bg-background-light dark:bg-background-dark">
-      <header class="flex justify-between items-center py-4">
-        <h1 class="text-2xl font-bold text-text-light dark:text-text-dark">Workout Tracker</h1>
+  <div :class="theme" class="min-h-screen bg-background-light dark:bg-background-dark">
+    <div class="relative">
+      <header
+        class="fixed top-0 left-0 right-0 z-30 flex justify-between items-center p-4 bg-background-light dark:bg-background-dark shadow-md"
+      >
+        <button
+          @click="menuOpen = !menuOpen"
+          class="p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-text-light dark:text-text-dark"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+        <img src="./assets/logo.svg" alt="Workout App Logo" class="h-10" />
         <button
           @click="toggleTheme"
           class="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2"
@@ -11,7 +32,7 @@
           <svg
             v-if="theme === 'dark'"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8 text-accent-yellow"
+            class="h-6 w-6 text-accent-yellow"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -26,7 +47,7 @@
           <svg
             v-else
             xmlns="http://www.w3.org/2000/svg"
-            class="h-8 w-8 text-primary-dark"
+            class="h-6 w-6 text-primary-dark"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -41,51 +62,35 @@
         </button>
       </header>
 
-      <div class="my-6">
-        <div class="flex bg-card-light dark:bg-card-dark rounded-full p-1">
-          <button
-            @click="activeTab = 'day1'"
-            class="w-1/2 py-3 text-center rounded-full transition-colors duration-300"
-            :class="{
-              'bg-primary-light dark:bg-primary-dark text-text-light dark:text-text-dark font-semibold':
-                activeTab === 'day1',
-              'text-gray-500 dark:text-gray-400': activeTab !== 'day1',
-            }"
-          >
-            Workout A
-          </button>
-          <button
-            @click="activeTab = 'day2'"
-            class="w-1/2 py-3 text-center rounded-full transition-colors duration-300"
-            :class="{
-              'bg-primary-light dark:bg-primary-dark text-text-light dark:text-text-dark font-semibold':
-                activeTab === 'day2',
-              'text-gray-500 dark:text-gray-400': activeTab !== 'day2',
-            }"
-          >
-            Workout B
-          </button>
+      <!-- Overlay -->
+      <div v-if="menuOpen" @click="menuOpen = false" class="fixed inset-0 bg-black/30 z-40"></div>
+
+      <SideMenu :is-open="menuOpen" @close="menuOpen = false" @logout="handleLogout" />
+
+      <main class="pt-20">
+        <div class="p-4 sm:p-6">
+          <router-view />
         </div>
-      </div>
-
-      <main class="space-y-6">
-        <WorkoutDay v-show="activeTab === 'day1'" day="day1" />
-        <WorkoutDay v-show="activeTab === 'day2'" day="day2" />
       </main>
-
-      <div class="mt-8">
-        <WorkoutSummary />
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import WorkoutDay from './components/WorkoutDay.vue';
-import WorkoutSummary from './components/WorkoutSummary.vue';
+import { useRouter } from 'vue-router';
 import { useTheme } from './composables/useTheme';
+import SideMenu from './components/SideMenu.vue';
 
-const activeTab = ref<'day1' | 'day2'>('day1');
 const { theme, toggleTheme } = useTheme();
+const menuOpen = ref(false);
+const router = useRouter();
+
+const handleLogout = () => {
+  console.log('Logout action triggered');
+  // Here you would typically clear any user session/token.
+  // For now, we'll just navigate to the login page.
+  menuOpen.value = false;
+  router.push('/login');
+};
 </script>

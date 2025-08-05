@@ -12,7 +12,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "vue": "^3.4.21"
+    "vue": "^3.4.21",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@typescript-eslint/parser": "^8.38.0",

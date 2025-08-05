@@ -1,0 +1,8 @@
+# New Requirement as Feature: 
+- Add a menu hamburgher to left side. 
+
+## UI Design example
+- @photo/image.png
+
+## Structure
+
