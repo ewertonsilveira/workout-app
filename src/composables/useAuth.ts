@@ -1,8 +1,9 @@
 import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import { useRouter } from 'vue-router';
+import type { User } from '@supabase/supabase-js';
 
-const user = ref(null);
+const user = ref<User | null>(null);
 
 export function useAuth() {
   const router = useRouter();
