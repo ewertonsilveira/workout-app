@@ -3,6 +3,7 @@ import RecordWorkout from '../views/RecordWorkout.vue';
 import CalendarView from '../views/CalendarView.vue';
 import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
+import NotFound from '../views/NotFound.vue';
 import { supabase } from '../supabase';
 
 const routes = [
@@ -10,6 +11,7 @@ const routes = [
   { path: '/calendar', component: CalendarView, meta: { requiresAuth: true } },
   { path: '/login', component: LoginView },
   { path: '/signup', component: SignupView },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ];
 
 const router = createRouter({
