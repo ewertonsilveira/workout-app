@@ -43,16 +43,18 @@
         </div>
       </div>
       <div class="grid grid-cols-2 gap-4">
-        <button
-          class="w-full py-2 font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-800"
+        <a
+          href="http://localhost:3000/auth/google"
+          class="w-full py-2 font-semibold text-center text-white bg-red-600 rounded-md hover:bg-red-700"
         >
           Google
-        </button>
-        <button
-          class="w-full py-2 font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-800"
+        </a>
+        <a
+          href="http://localhost:3000/auth/github"
+          class="w-full py-2 font-semibold text-center text-white bg-gray-700 rounded-md hover:bg-gray-800"
         >
           GitHub
-        </button>
+        </a>
       </div>
       <p class="text-sm text-center text-gray-600 dark:text-gray-400">
         Don't have an account?
