@@ -5,7 +5,7 @@
 
       <div class="flex-1 flex flex-col overflow-hidden">
         <header
-          class="flex justify-between items-center p-4 shadow-md bg-background-light dark:bg-background-dark"
+          class="flex justify-between items-center p-4 shadow-lg bg-background-light dark:bg-background-dark"
         >
           <button @click="isMenuOpen = !isMenuOpen" class="text-text-light dark:text-text-dark">
             <svg
@@ -29,7 +29,10 @@
           </div>
 
           <div class="flex items-center space-x-4">
-            <button @click="toggleTheme" class="text-text-light dark:text-text-dark">
+            <button
+              @click="toggleTheme"
+              :class="isDarkMode ? 'text-primary-dark' : 'text-text-light'"
+            >
               <svg
                 v-if="isDarkMode"
                 class="w-6 h-6"
@@ -65,9 +68,7 @@
           </div>
         </header>
 
-        <main
-          class="flex-1 overflow-x-hidden overflow-y-auto p-4 bg-background-light dark:bg-background-dark"
-        >
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-4">
           <router-view />
         </main>
       </div>

@@ -1,49 +1,18 @@
 <template>
   <div class="space-y-6">
-    <AccordionItem title="Pull Exercises">
+    <AccordionItem v-for="category in categories" :key="category.id" :title="category.name">
       <ExerciseItem
-        v-for="(exercise, index) in store.exercises[day].pull"
-        :key="`pull-${index}`"
+        v-for="exercise in getExercisesForCategory(category.id)"
+        :key="exercise.id"
         :exercise="exercise"
-        @toggle-completion="store.toggleCompletion(day, 'pull', index)"
-        @update-exercise="store.updateExercise(day, 'pull', index, $event)"
       />
     </AccordionItem>
-
-    <AccordionItem title="Push Exercises">
-      <ExerciseItem
-        v-for="(exercise, index) in store.exercises[day].push"
-        :key="`push-${index}`"
-        :exercise="exercise"
-        @toggle-completion="store.toggleCompletion(day, 'push', index)"
-        @update-exercise="store.updateExercise(day, 'push', index, $event)"
-      />
-    </AccordionItem>
-
-    <AccordionItem title="Leg Exercises">
-      <ExerciseItem
-        v-for="(exercise, index) in store.exercises[day].legs"
-        :key="`legs-${index}`"
-        :exercise="exercise"
-        @toggle-completion="store.toggleCompletion(day, 'legs', index)"
-        @update-exercise="store.updateExercise(day, 'legs', index, $event)"
-      />
-    </AccordionItem>
-
-    <div class="text-center pt-4">
-      <button
-        @click="store.resetDay(day)"
-        class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-full transition-colors text-lg"
-      >
-        Reset Progress
-      </button>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useWorkoutStore } from '../composables/useWorkoutStore';
-
 import ExerciseItem from './ExerciseItem.vue';
 import AccordionItem from './AccordionItem.vue';
 
@@ -52,4 +21,12 @@ defineProps<{
 }>();
 
 const store = useWorkoutStore();
+
+const categories = computed(() => {
+  return store.muscleGroups.filter((mg) => mg.parent === null);
+});
+
+const getExercisesForCategory = (categoryId: number) => {
+  return store.allWorkouts.filter((ex) => ex.primary === categoryId);
+};
 </script>
