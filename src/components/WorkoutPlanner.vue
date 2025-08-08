@@ -1,61 +1,46 @@
 <template>
-  <div class="container mx-auto px-4 py-8 md:py-12">
-    <header class="text-center mb-10">
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white">
-        Ewerton's Workout Plan
-      </h1>
-      <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
-        Select a muscle group to see the related workouts.
-      </p>
-    </header>
-
-    <div class="max-w-4xl mx-auto">
-      <div class="mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-        <h2 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d] dark:text-[#a89a87]">
-          Filter Workouts
-        </h2>
-        <div class="flex justify-center items-center space-x-4">
-          <div class="w-1/2">
-            <label
-              for="main-muscle-group"
-              class="font-semibold text-lg text-gray-900 dark:text-white"
-              >Main Muscle Group:</label
-            >
-            <select
-              id="main-muscle-group"
-              v-model="selectedMainGroup"
-              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option :value="null">All</option>
-              <option v-for="group in mainMuscleGroups" :key="group.id" :value="group.id">
-                {{ group.name }}
-              </option>
-            </select>
-          </div>
-          <div class="w-1/2">
-            <label
-              for="sub-muscle-group"
-              class="font-semibold text-lg text-gray-900 dark:text-white"
-              >Sub Muscle Group:</label
-            >
-            <select
-              id="sub-muscle-group"
-              v-model="selectedSubGroup"
-              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-            >
-              <option :value="null">All</option>
-              <option v-for="group in subMuscleGroups" :key="group.id" :value="group.id">
-                {{ group.name }}
-              </option>
-            </select>
-          </div>
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <h2 class="text-2xl font-bold mb-4 text-center text-[#8c6f5d] dark:text-[#a89a87]">
+        Filter Workouts
+      </h2>
+      <div class="flex justify-center items-center space-x-4">
+        <div class="w-1/2">
+          <label for="main-muscle-group" class="font-semibold text-lg text-gray-900 dark:text-white"
+            >Main Muscle Group:</label
+          >
+          <select
+            id="main-muscle-group"
+            v-model="selectedMainGroup"
+            class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          >
+            <option :value="null">All</option>
+            <option v-for="group in mainMuscleGroups" :key="group.id" :value="group.id">
+              {{ group.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-1/2">
+          <label for="sub-muscle-group" class="font-semibold text-lg text-gray-900 dark:text-white"
+            >Sub Muscle Group:</label
+          >
+          <select
+            id="sub-muscle-group"
+            v-model="selectedSubGroup"
+            class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          >
+            <option :value="null">All</option>
+            <option v-for="group in subMuscleGroups" :key="group.id" :value="group.id">
+              {{ group.name }}
+            </option>
+          </select>
         </div>
       </div>
-
-      <main>
-        <WorkoutList :workouts="filteredWorkouts" />
-      </main>
     </div>
+
+    <main>
+      <WorkoutList :workouts="filteredWorkouts" />
+    </main>
   </div>
 </template>
 

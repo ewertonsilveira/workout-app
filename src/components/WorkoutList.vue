@@ -7,9 +7,9 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import ExerciseItem from './ExerciseItem.vue';
-import { Exercise } from '../composables/useWorkoutStore';
+import { NewExercise } from '../composables/useWorkoutStore';
 
 defineProps<{
-  workouts: Exercise[];
+  workouts: NewExercise[];
 }>();
 </script>

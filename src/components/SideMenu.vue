@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="fixed top-0 left-0 h-full bg-card-light dark:bg-card-dark w-64 transform transition-transform duration-300 ease-in-out flex flex-col z-50"
+    class="fixed top-0 left-0 h-full bg-background-light dark:bg-background-dark w-64 transform transition-transform duration-300 ease-in-out flex flex-col z-50 shadow-lg"
     :class="isOpen ? 'translate-x-0' : '-translate-x-full'"
   >
     <nav class="mt-20 flex-grow px-2">

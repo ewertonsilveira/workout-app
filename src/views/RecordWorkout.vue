@@ -13,11 +13,11 @@
       <div class="flex flex-col lg:flex-row gap-8">
         <div class="lg:w-2/3">
           <div class="mb-8 flex justify-center">
-            <div class="flex w-full max-w-md p-1 bg-gray-200 dark:bg-gray-700 rounded-full">
+            <div class="flex w-full max-w-lg p-1 bg-gray-200 dark:bg-gray-700 rounded-full">
               <button
                 @click="activeTab = 'day1'"
                 :class="[
-                  'w-1/2 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
+                  'w-1/3 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
                   activeTab === 'day1'
                     ? 'bg-primary-dark text-white'
                     : 'bg-transparent text-text-light dark:text-text-dark',
@@ -28,13 +28,24 @@
               <button
                 @click="activeTab = 'day2'"
                 :class="[
-                  'w-1/2 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
+                  'w-1/3 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
                   activeTab === 'day2'
                     ? 'bg-primary-dark text-white'
                     : 'bg-transparent text-text-light dark:text-text-dark',
                 ]"
               >
                 Workout Day 2
+              </button>
+              <button
+                @click="activeTab = 'browse'"
+                :class="[
+                  'w-1/3 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
+                  activeTab === 'browse'
+                    ? 'bg-primary-dark text-white'
+                    : 'bg-transparent text-text-light dark:text-text-dark',
+                ]"
+              >
+                Browse Workouts
               </button>
             </div>
           </div>
@@ -50,6 +61,9 @@
               day="day2"
               description="Your second session builds on the first. You'll find slight variations in exercises to challenge your muscles in new ways, ensuring balanced development."
             />
+            <div v-if="activeTab === 'browse'">
+              <WorkoutPlanner />
+            </div>
           </main>
         </div>
         <div class="lg:w-1/3">
@@ -66,6 +80,7 @@
 import { ref } from 'vue';
 import WorkoutDay from '../components/WorkoutDay.vue';
 import WorkoutSummary from '../components/WorkoutSummary.vue';
+import WorkoutPlanner from '../components/WorkoutPlanner.vue';
 
-const activeTab = ref<'day1' | 'day2'>('day1');
+const activeTab = ref<'day1' | 'day2' | 'browse'>('day1');
 </script>

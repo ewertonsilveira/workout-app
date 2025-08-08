@@ -21,7 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import { useWorkoutStore } from '../composables/useWorkoutStore';
+import { defineProps } from 'vue';
+import { useWorkoutStore, NewExercise } from '../composables/useWorkoutStore';
+
+defineProps<{
+  exercise: NewExercise;
+}>();
 
 const store = useWorkoutStore();
 
@@ -30,6 +35,9 @@ const getMuscleGroupName = (id: number) => {
 };
 
 const getSecondaryMuscleGroups = (ids: number[]) => {
+  if (!Array.isArray(ids)) {
+    return '';
+  }
   return ids.map((id) => getMuscleGroupName(id)).join(', ');
 };
 </script>

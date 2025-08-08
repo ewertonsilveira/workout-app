@@ -1,7 +1,5 @@
 <template>
   <div class="space-y-6">
-    <ProgressTracker :day="day" />
-
     <AccordionItem title="Pull Exercises">
       <ExerciseItem
         v-for="(exercise, index) in store.exercises[day].pull"
@@ -45,7 +43,7 @@
 
 <script setup lang="ts">
 import { useWorkoutStore } from '../composables/useWorkoutStore';
-import ProgressTracker from './ProgressTracker.vue';
+
 import ExerciseItem from './ExerciseItem.vue';
 import AccordionItem from './AccordionItem.vue';
 
