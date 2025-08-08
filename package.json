@@ -8,7 +8,7 @@
     "start": "npm run dev",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint  .eslintignore --fix",
+    "lint": "eslint . --fix",
     "format": "prettier --write .",
     "prepare": "husky"
   },
