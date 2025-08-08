@@ -229,7 +229,8 @@ const allWorkouts: NewExercise[] = [
   },
 ];
 
-const muscleGroupMap = new Map(muscleGroups.map((mg) => [mg.id, mg]));
+const savedSettings = localStorage.getItem('workout-settings');
+const defaultSettings = savedSettings ? JSON.parse(savedSettings) : { sets: 3, reps: 10, weight: 10 };
 
 const savedExercises = localStorage.getItem('workout-data');
 const exercisesData: WorkoutData = savedExercises ? JSON.parse(savedExercises) : defaultExercises;
@@ -241,6 +242,9 @@ const store = reactive({
   // NEW STATE
   muscleGroups,
   allWorkouts,
+  defaultSets: defaultSettings.sets,
+  defaultReps: defaultSettings.reps,
+  defaultWeight: defaultSettings.weight,
 
   // OLD ACTIONS
   toggleCompletion(day: WorkoutDay, category: ExerciseCategory, exerciseIndex: number) {
@@ -272,6 +276,17 @@ const store = reactive({
   // NEW GETTERS
   getMuscleGroupNameById(id: number) {
     return muscleGroupMap.get(id)?.name || 'Unknown';
+  },
+
+  // NEW ACTIONS
+  setDefaultSettings(sets: number, reps: number, weight: number) {
+    store.defaultSets = sets;
+    store.defaultReps = reps;
+    store.defaultWeight = weight;
+    localStorage.setItem('workout-settings', JSON.stringify({ sets, reps, weight }));
+  },
+  addExercise(exercise: NewExercise) {
+    store.allWorkouts.push(exercise);
   },
 });
 

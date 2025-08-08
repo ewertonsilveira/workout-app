@@ -1,7 +1,8 @@
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 export function useTheme() {
   const theme = ref(localStorage.getItem('theme') || 'dark');
+  const isDarkMode = computed(() => theme.value === 'dark');
 
   function toggleTheme() {
     theme.value = theme.value === 'light' ? 'dark' : 'light';
@@ -23,6 +24,7 @@ export function useTheme() {
 
   return {
     theme,
+    isDarkMode,
     toggleTheme,
   };
 }

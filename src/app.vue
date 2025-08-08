@@ -31,11 +31,11 @@
           <div class="flex items-center space-x-4">
             <button
               @click="toggleTheme"
-              :class="isDarkMode ? 'text-primary-dark' : 'text-text-light'"
+              :class="isDarkMode ? 'p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white' : 'p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500'"
             >
               <svg
-                v-if="isDarkMode"
-                class="w-6 h-6"
+                v-if="!isDarkMode"
+                class="w-6 h-6 text-yellow-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -50,7 +50,7 @@
               </svg>
               <svg
                 v-else
-                class="w-6 h-6"
+                class="w-6 h-6 text-gray-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
