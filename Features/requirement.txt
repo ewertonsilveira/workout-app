@@ -1,6 +1,16 @@
 # New Requirement as Feature: 
-- After sign up, user needs to be redirected to default landing page
-- `/login` url needs to be part of route page. Display user logged in info or if user is not logged in, display login page
+
+hierarchical muscle group category list including sub-muscle groups with parent references, and a JavaScript list of workouts keyed by these detailed muscle groups with primary and secondary muscle IDs instead of names, merged across workout days.
+
+Go back to the allWorkouts list we built and update all primary / secondary IDs to use these sub-muscle IDs instead of the old mixed list. That way, everything matches perfectly to this hierarchy.
+
+    Example usage:
+    "Upper Chest" (id: 7) has parent: 1 → parent is "Chest".
+    "Front Deltoids" (id: 9) has parent: 2 → parent is "Shoulders".
+    "Triceps" (id: 14) has parent: 3 → parent is "Arms".
+This means:
+    primary and secondary in your allWorkouts can point to sub-muscle IDs.
+    You can easily get both the sub-muscle name and its parent group in one lookup.
 
 # Code example:
 
