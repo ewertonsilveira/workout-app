@@ -47,8 +47,11 @@ const categories: ExerciseCategory[] = ['pull', 'push', 'legs'];
 const completedExercises = computed<Exercise[]>(() => {
   const allExercises: Exercise[] = [];
   for (const day of Object.values(store.exercises)) {
-    for (const category of Object.values(day)) {
-      allExercises.push(...category.filter((ex) => ex.completed));
+    for (const category of day.categories) {
+      const exercises = day.exercises[category];
+      if (exercises) {
+        allExercises.push(...exercises.filter((ex) => ex.completed));
+      }
     }
   }
   return allExercises;
@@ -57,11 +60,16 @@ const completedExercises = computed<Exercise[]>(() => {
 const getCompletedExercises = (category: ExerciseCategory) => {
   const categoryExercises = new Map<string, Exercise>();
   for (const day of Object.values(store.exercises)) {
-    day[category]?.forEach((ex) => {
-      if (ex.completed) {
-        categoryExercises.set(ex.name, ex);
+    if (day.categories.includes(category)) {
+      const exercises = day.exercises[category];
+      if (exercises) {
+        exercises.forEach((ex) => {
+          if (ex.completed) {
+            categoryExercises.set(ex.name, ex);
+          }
+        });
       }
-    });
+    }
   }
   return Array.from(categoryExercises.values());
 };

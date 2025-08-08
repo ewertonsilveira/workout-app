@@ -1,5 +1,10 @@
 import { createApp } from 'vue';
-import WorkoutPlanner from './components/WorkoutPlanner.vue';
+import App from './app.vue';
+import router from './router';
 import './assets/styles/main.scss';
 
-createApp(WorkoutPlanner).mount('#app');
+const app = createApp(App);
+
+app.use(router);
+
+app.mount('#app');
