@@ -17,11 +17,12 @@
         >Calendar</router-link
       >
       <router-link
-        to="/settings"
+        to="/browse-workouts"
         class="block py-4 px-6 text-lg text-text-light dark:text-text-dark hover:bg-primary-light dark:hover:bg-primary-dark rounded-lg"
         @click="$emit('close')"
-        >Settings</router-link
+        >Browse Workouts</router-link
       >
+      
     </nav>
     <div class="p-4">
       <button

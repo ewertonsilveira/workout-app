@@ -39,15 +39,20 @@
     </div>
 
     <main>
-      <WorkoutList :workouts="filteredWorkouts" />
+      <WorkoutList :workouts="filteredWorkouts" @edit="emit('edit-workout', $event)" />
     </main>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, defineEmits } from 'vue';
 import { useWorkoutStore } from '../composables/useWorkoutStore';
 import WorkoutList from './WorkoutList.vue';
+import { NewExercise } from '../composables/useWorkoutStore';
+
+const emit = defineEmits<{
+  (e: 'edit-workout', workout: NewExercise): void;
+}>();
 
 const store = useWorkoutStore();
 const selectedMainGroup = ref<number | null>(null);
@@ -63,18 +68,18 @@ const subMuscleGroups = computed(() => {
 });
 
 const filteredWorkouts = computed(() => {
-  let workouts = store.allWorkouts;
+  let workouts = store.allWorkouts.value;
 
   if (selectedSubGroup.value !== null) {
     return workouts.filter(
-      (w) => w.primary === selectedSubGroup.value || w.secondary.includes(selectedSubGroup.value)
+      (w) => w.primary_muscle_group === selectedSubGroup.value || (w.secondary_muscle_groups || []).includes(selectedSubGroup.value)
     );
   }
 
   if (selectedMainGroup.value !== null) {
     const subGroupIds = subMuscleGroups.value.map((g) => g.id);
     return workouts.filter(
-      (w) => subGroupIds.includes(w.primary) || w.secondary.some((sg) => subGroupIds.includes(sg))
+      (w) => subGroupIds.includes(w.primary_muscle_group) || (w.secondary_muscle_groups || []).some((sg) => subGroupIds.includes(sg))
     );
   }
 

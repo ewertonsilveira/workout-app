@@ -34,21 +34,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, defineProps } from 'vue';
 import {
   useWorkoutStore,
   type Exercise,
   type ExerciseCategory,
+  type WorkoutDay,
 } from '../composables/useWorkoutStore';
+
+const props = defineProps<{ day: WorkoutDay }>();
 
 const store = useWorkoutStore();
 const categories: ExerciseCategory[] = ['pull', 'push', 'legs'];
 
 const completedExercises = computed<Exercise[]>(() => {
   const allExercises: Exercise[] = [];
-  for (const day of Object.values(store.exercises)) {
+  const currentDayExercises = store.exercises[props.day];
+  if (currentDayExercises) {
     for (const category of categories) {
-      const exercises = day[category];
+      const exercises = currentDayExercises[category];
       if (exercises) {
         allExercises.push(...exercises.filter((ex) => ex.completed));
       }
@@ -59,8 +63,9 @@ const completedExercises = computed<Exercise[]>(() => {
 
 const getCompletedExercises = (category: ExerciseCategory) => {
   const categoryExercises = new Map<string, Exercise>();
-  for (const day of Object.values(store.exercises)) {
-    const exercises = day[category];
+  const currentDayExercises = store.exercises[props.day];
+  if (currentDayExercises) {
+    const exercises = currentDayExercises[category];
     if (exercises) {
       exercises.forEach((ex) => {
         if (ex.completed) {

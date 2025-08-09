@@ -1,4 +1,5 @@
-import { reactive, watch } from 'vue';
+import { reactive, watch, computed, ref } from 'vue';
+import { supabase } from '../supabase'; // Import supabase client
 
 // OLD DATA STRUCTURES
 export interface Exercise {
@@ -10,7 +11,7 @@ export interface Exercise {
 }
 
 export type ExerciseCategory = 'push' | 'pull' | 'legs';
-export type WorkoutDay = 'day1' | 'day2';
+export type WorkoutDay = string;
 
 type WorkoutData = {
   [key in WorkoutDay]: {
@@ -83,8 +84,8 @@ export interface MuscleGroup {
 
 export interface NewExercise {
   id: number;
-  primary: number;
-  secondary: number[];
+  primary_muscle_group: number;
+  secondary_muscle_groups: number[];
   name: string;
   details: string;
   completed?: boolean; // Optional for tracking state
@@ -118,116 +119,9 @@ const muscleGroups: MuscleGroup[] = [
   { id: 25, name: 'Calves', parent: 6 },
 ];
 
-const allWorkouts: NewExercise[] = [
-  {
-    id: 1,
-    primary: 8,
-    secondary: [14, 9],
-    name: 'Bench Press (15kg)',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 2,
-    primary: 7,
-    secondary: [9, 14],
-    name: 'Incline Bench Press',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 3,
-    primary: 8,
-    secondary: [9, 14, 20],
-    name: 'Push-ups & Variations',
-    details: '3 sets to failure',
-  },
-  {
-    id: 4,
-    primary: 8,
-    secondary: [14, 9],
-    name: 'Straight Bar Dips',
-    details: '3 sets to failure',
-  },
-  {
-    id: 5,
-    primary: 9,
-    secondary: [14, 7, 13],
-    name: 'Overhead Press',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 6,
-    primary: 10,
-    secondary: [9, 11, 13],
-    name: 'Lateral Raise (5kg)',
-    details: '3 sets of 12 reps',
-  },
-  { id: 7, primary: 9, secondary: [14, 7], name: 'Pike Push-ups', details: '3 sets of 5 reps' },
-  { id: 8, primary: 11, secondary: [12, 13], name: 'Egyptian Raise', details: '3 sets of 10 reps' },
-  { id: 9, primary: 9, secondary: [14, 13, 20], name: 'Handstand Hold', details: '3x30 sec holds' },
-  {
-    id: 10,
-    primary: 17,
-    secondary: [15, 13, 10, 20],
-    name: 'Pull-ups (Weighted 15kg)',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 11,
-    primary: 17,
-    secondary: [15, 16, 13],
-    name: 'Chin-ups (Weighted 15kg)',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 12,
-    primary: 17,
-    secondary: [10, 15],
-    name: 'Bent-over Barbell Row',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 13,
-    primary: 17,
-    secondary: [10, 15],
-    name: 'Seated Cable Row',
-    details: '3 sets of 10 reps',
-  },
-  {
-    id: 14,
-    primary: 17,
-    secondary: [15, 13, 18],
-    name: 'Lat Pulldown',
-    details: '3 sets of 10 reps',
-  },
-  {
-    id: 15,
-    primary: 8,
-    secondary: [14, 20, 1],
-    name: 'Low Bar Transitions / Negative Muscle Ups',
-    details: '3 sets to failure',
-  },
-  {
-    id: 16,
-    primary: 15,
-    secondary: [16, 17],
-    name: 'Ring Curl / Pelican Curl',
-    details: '3 sets of 10 reps',
-  },
-  {
-    id: 17,
-    primary: 22,
-    secondary: [24, 23, 20],
-    name: 'Barbell Back Squat',
-    details: '3 sets of 8 reps',
-  },
-  {
-    id: 18,
-    primary: 23,
-    secondary: [24, 19],
-    name: 'Romanian Deadlift',
-    details: '3 sets of 8 reps',
-  },
-];
+const muscleGroupMap = new Map(muscleGroups.map((group) => [group.id, group]));
+
+const allWorkouts = ref<NewExercise[]>([]); // Changed to ref
 
 const savedSettings = localStorage.getItem('workout-settings');
 const defaultSettings = savedSettings ? JSON.parse(savedSettings) : { sets: 3, reps: 10, weight: 10 };
@@ -248,8 +142,12 @@ const store = reactive({
 
   // OLD ACTIONS
   toggleCompletion(day: WorkoutDay, category: ExerciseCategory, exerciseIndex: number) {
+    console.log('toggleCompletion called with:', { day, category, exerciseIndex });
     const exercise = store.exercises[day][category][exerciseIndex];
-    exercise.completed = !exercise.completed;
+    const updatedExercise = { ...exercise, completed: !exercise.completed };
+    const newCategoryExercises = [...store.exercises[day][category]];
+    newCategoryExercises[exerciseIndex] = updatedExercise;
+    store.exercises[day][category] = newCategoryExercises;
   },
   updateExercise(
     day: WorkoutDay,
@@ -278,6 +176,18 @@ const store = reactive({
     return muscleGroupMap.get(id)?.name || 'Unknown';
   },
 
+  getExercisesByCategory: computed(() => (day: WorkoutDay) => {
+    const categorized: { [key: string]: Exercise[] } = {
+      push: [],
+      pull: [],
+      legs: [],
+    };
+    for (const category in store.exercises[day]) {
+      categorized[category] = store.exercises[day][category as ExerciseCategory];
+    };
+    return categorized;
+  }),
+
   // NEW ACTIONS
   setDefaultSettings(sets: number, reps: number, weight: number) {
     store.defaultSets = sets;
@@ -285,10 +195,45 @@ const store = reactive({
     store.defaultWeight = weight;
     localStorage.setItem('workout-settings', JSON.stringify({ sets, reps, weight }));
   },
-  addExercise(exercise: NewExercise) {
-    store.allWorkouts.push(exercise);
+  async fetchWorkouts() {
+    const { data, error } = await supabase.from('exercise_definitions').select('*');
+    if (error) {
+      console.error('Error fetching workouts:', error);
+    } else {
+      store.allWorkouts.value = data || [];
+    }
   },
+  async addExercise(exercise: NewExercise) {
+    const { data, error } = await supabase.from('exercise_definitions').insert([exercise]).select();
+    if (error) {
+      console.error('Error adding workout:', error);
+    } else if (data) {
+      store.allWorkouts.value.push(data[0]);
+    }
+  },
+  async updateWorkout(exercise: NewExercise) {
+    const { data, error } = await supabase.from('exercise_definitions').update(exercise).eq('id', exercise.id).select();
+    if (error) {
+      console.error('Error updating workout:', error);
+    } else if (data) {
+      const index = store.allWorkouts.value.findIndex(w => w.id === exercise.id);
+      if (index !== -1) {
+        store.allWorkouts.value[index] = data[0];
+      }
+    }
+  },
+  async deleteWorkout(id: number) {
+    const { error } = await supabase.from('exercise_definitions').delete().eq('id', id);
+    if (error) {
+      console.error('Error deleting workout:', error);
+    } else {
+      store.allWorkouts.value = store.allWorkouts.value.filter(w => w.id !== id);
+    }
+  }
 });
+
+// Initial fetch of workouts
+store.fetchWorkouts();
 
 watch(
   () => store.exercises,

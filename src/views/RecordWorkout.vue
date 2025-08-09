@@ -17,7 +17,7 @@
               <button
                 @click="activeTab = 'day1'"
                 :class="[
-                  'w-1/3 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
+                  'w-1/2 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
                   activeTab === 'day1'
                     ? 'bg-primary-dark text-white'
                     : 'bg-transparent text-text-light dark:text-text-dark',
@@ -28,7 +28,7 @@
               <button
                 @click="activeTab = 'day2'"
                 :class="[
-                  'w-1/3 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
+                  'w-1/2 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
                   activeTab === 'day2'
                     ? 'bg-primary-dark text-white'
                     : 'bg-transparent text-text-light dark:text-text-dark',
@@ -36,68 +36,29 @@
               >
                 Workout Day 2
               </button>
-              <button
-                @click="activeTab = 'browse'"
-                :class="[
-                  'w-1/3 py-3 text-lg font-semibold rounded-full focus:outline-none transition-colors duration-300',
-                  activeTab === 'browse'
-                    ? 'bg-primary-dark text-white'
-                    : 'bg-transparent text-text-light dark:text-text-dark',
-                ]"
-              >
-                Browse Workouts
-              </button>
             </div>
           </div>
 
           <main>
-            <WorkoutDay
-              v-if="activeTab === 'day1'"
-              day="day1"
-              description="This is your first full-body session of the week. Focus on controlled movements and proper form to maximize muscle engagement across all groups."
-            />
-            <WorkoutDay
-              v-if="activeTab === 'day2'"
-              day="day2"
-              description="Your second session builds on the first. You'll find slight variations in exercises to challenge your muscles in new ways, ensuring balanced development."
-            />
-            <div v-if="activeTab === 'browse'">
-              <WorkoutPlanner />
+            <div v-for="(exercises, category) in categorizedExercises" :key="category" class="mb-6">
+              <AccordionItem :title="category.charAt(0).toUpperCase() + category.slice(1) + ' Exercises'">
+                <div class="space-y-4">
+                  <ExerciseItem
+                    v-for="(exercise, index) in exercises"
+                    :key="exercise.name"
+                    :exercise="exercise"
+                    :day="activeTab"
+                    :category="category"
+                    :exercise-index="index"
+                  />
+                </div>
+              </AccordionItem>
             </div>
           </main>
         </div>
         <div class="lg:w-1/3">
           <div class="sticky top-24">
-            <WorkoutSummary />
-                        <button @click="showAddExerciseForm = !showAddExerciseForm; newExercise.details = `${store.defaultSets} sets of ${store.defaultReps} reps at ${store.defaultWeight}kg`" class="mt-4 w-full bg-green-500 text-white py-2 px-4 rounded">
-              Add Exercise
-            </button>
-            <div v-if="showAddExerciseForm" class="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-              <h3 class="text-lg font-bold mb-2">Add New Exercise</h3>
-              <form @submit.prevent="addExercise">
-                <div class="mb-2">
-                  <label for="exerciseName">Name</label>
-                  <input type="text" id="exerciseName" v-model="newExercise.name" class="w-full p-2 border rounded">
-                </div>
-                <div class="mb-2">
-                  <label for="exerciseDetails">Details</label>
-                  <input type="text" id="exerciseDetails" v-model="newExercise.details" class="w-full p-2 border rounded">
-                </div>
-                <div class="mb-2">
-                  <label for="primaryMuscle">Primary Muscle</label>
-                  <select id="primaryMuscle" v-model="newExercise.primary" class="w-full p-2 border rounded">
-                    <option v-for="group in store.muscleGroups" :key="group.id" :value="group.id">{{ group.name }}</option>
-                  </select>
-                </div>
-                <div class="mb-2">
-                  <label for="secondaryMuscle">Secondary Muscles</label>
-                  <select id="secondaryMuscle" v-model="newExercise.secondary" multiple class="w-full p-2 border rounded">
-                    <option v-for="group in store.muscleGroups" :key="group.id" :value="group.id">{{ group.name }}</option>
-                  </select>
-                </div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded">Add</button>
-              </form>
-            </div>
+            <WorkoutSummary :day="activeTab" />
           </div>
         </div>
       </div>
@@ -106,39 +67,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import WorkoutDay from '../components/WorkoutDay.vue';
+import { ref, computed } from 'vue';
 import WorkoutSummary from '../components/WorkoutSummary.vue';
-import WorkoutPlanner from '../components/WorkoutPlanner.vue';
-import { useWorkoutStore } from '../composables/useWorkoutStore';
+import AccordionItem from '../components/AccordionItem.vue';
+import ExerciseItem from '../components/ExerciseItem.vue';
+import { useWorkoutStore, WorkoutDay, ExerciseCategory } from '../composables/useWorkoutStore';
 
-const activeTab = ref<'day1' | 'day2' | 'browse'>('day1');
-const showAddExerciseForm = ref(false);
-const newExercise = ref({
-  name: '',
-  details: ``, // Default details
-  primary: null,
-  secondary: [],
-});
+const activeTab = ref<WorkoutDay>('day1');
 
 const store = useWorkoutStore();
 
-const addExercise = () => {
-  if (newExercise.value.name && newExercise.value.primary) {
-    store.addExercise({
-      id: Date.now(),
-      name: newExercise.value.name,
-      details: newExercise.value.details || `${store.defaultSets} sets of ${store.defaultReps} reps at ${store.defaultWeight}kg`,
-      primary: newExercise.value.primary,
-      secondary: newExercise.value.secondary,
-    });
-    newExercise.value = {
-      name: '',
-      details: ``,
-      primary: null,
-      secondary: [],
-    };
-    showAddExerciseForm.value = false;
+const categorizedExercises = computed(() => {
+  if (activeTab.value === 'day1' || activeTab.value === 'day2') {
+    return store.getExercisesByCategory(activeTab.value);
   }
-};
+  return {};
+});
 </script>

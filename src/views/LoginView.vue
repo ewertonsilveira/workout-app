@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+  <div class="flex items-center justify-center min-h-screen bg-background-light dark:bg-background-dark">
     <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <div v-if="user">
         <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white">Welcome</h1>

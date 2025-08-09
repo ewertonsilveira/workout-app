@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
 import NotFound from '../views/NotFound.vue';
 import SettingsView from '../views/SettingsView.vue';
+import BrowseWorkoutsView from '../views/BrowseWorkoutsView.vue';
 import { supabase } from '../supabase';
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
   { path: '/calendar', component: CalendarView, meta: { requiresAuth: true } },
   { path: '/login', component: LoginView },
   { path: '/signup', component: SignupView },
+  { path: '/browse-workouts', component: BrowseWorkoutsView, meta: { requiresAuth: true } },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
   { path: '/settings', component: SettingsView, meta: { requiresAuth: true } },
 ];
